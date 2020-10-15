@@ -19,16 +19,12 @@ session = Session(ip, port_, username_, password_)
 session.open(False)
 
 # set and delete storage groups
-session.set_storage_group("root.batch1")
-session.create_time_series("root.batch1.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
+session.set_storage_group("root.one_m")
+session.create_time_series("root.one_m.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
 
 measurements_ = ["s1"]
 values_ = [10]
 data_types_ = [TSDataType.DOUBLE]
-
-
-
-
 
 # returns the elapsed milliseconds since the start of the program
 def millis():
@@ -45,10 +41,8 @@ try:
         temperature = 20.0
         temperature += random.uniform(-1, 1)
         values.append(np.around(temperature, 4))
-        # print(values)
         milliseconds = int(millis())
-        # print(milliseconds/1000)
-        session.insert_record("root.batch", milliseconds, measurements_, data_types_, values)
+        session.insert_record("root.one_m", milliseconds, measurements_, data_types_, values)
         time +=1
         sleep(0.00048828125)
 finally:
@@ -56,5 +50,3 @@ finally:
     print(time)
     session.close()
     print("All executions done!!")
-
-

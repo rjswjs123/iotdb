@@ -35,26 +35,30 @@ temp20=tempsens.add_variable('ns=2;s="TS20_Temperature"',"TS20 Temperature",20)
 
 
 sensor_number=5
-
+time=0
 try:
     print("start server")
     server.start()
     print("Server online")
+
     while True:
         temperature = 20.0
         print(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f'))
+        time+=1
         for i in tempsens.get_children():
             temperature += random.uniform(-1, 1)
             i.set_value(np.around(temperature,4))
 
-        print("New Temperature1: " + str(temp1.get_value())+","+str(temp2.get_value())+","+str(temp3.get_value())+","+str(temp4.get_value())+","+str(temp5.get_value())
-              +str(temp6.get_value())+","+str(temp7.get_value())+","+str(temp8.get_value())+","+str(temp9.get_value())+","+str(temp10.get_value())
-              +str(temp11.get_value())+","+str(temp12.get_value())+","+str(temp13.get_value())+","+str(temp14.get_value())+","+str(temp15.get_value())
-              +str(temp16.get_value())+","+str(temp17.get_value())+","+str(temp18.get_value())+","+str(temp19.get_value())+","+str(temp20.get_value()))
-        # sleep(2)
+        # print("New Temperature1: " + str(temp1.get_value())+","+str(temp2.get_value())+","+str(temp3.get_value())+","+str(temp4.get_value())+","+str(temp5.get_value())
+        #       +str(temp6.get_value())+","+str(temp7.get_value())+","+str(temp8.get_value())+","+str(temp9.get_value())+","+str(temp10.get_value())
+        #       +str(temp11.get_value())+","+str(temp12.get_value())+","+str(temp13.get_value())+","+str(temp14.get_value())+","+str(temp15.get_value())
+        #       +str(temp16.get_value())+","+str(temp17.get_value())+","+str(temp18.get_value())+","+str(temp19.get_value())+","+str(temp20.get_value()))
+        print("total: " + str(time))
 finally:
     server.stop()
     print("server offline")
+
+
 
 
 

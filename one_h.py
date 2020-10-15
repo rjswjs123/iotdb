@@ -19,8 +19,8 @@ session = Session(ip, port_, username_, password_)
 session.open(False)
 
 # set and delete storage groups
-session.set_storage_group("root.batch1")
-session.create_time_series("root.batch1.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
+session.set_storage_group("root.one_h")
+session.create_time_series("root.one_h.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
 
 measurements_ = ["s1"]
 values_ = [10]
@@ -38,17 +38,16 @@ def millis():
 
 milliseconds=0
 time=0
+
 start_time = datetime.now()
 try:
-    while milliseconds<(60*1000):
+    while milliseconds<(3600*1000):
         values = []
         temperature = 20.0
         temperature += random.uniform(-1, 1)
         values.append(np.around(temperature, 4))
-        # print(values)
         milliseconds = int(millis())
-        # print(milliseconds/1000)
-        session.insert_record("root.batch", milliseconds, measurements_, data_types_, values)
+        session.insert_record("root.one_h", milliseconds, measurements_, data_types_, values)
         time +=1
         sleep(0.00048828125)
 finally:

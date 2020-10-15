@@ -19,8 +19,8 @@ session = Session(ip, port_, username_, password_)
 session.open(False)
 
 # set and delete storage groups
-session.set_storage_group("root.batch1")
-session.create_time_series("root.batch1.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
+session.set_storage_group("root.one_m")
+session.create_time_series("root.one_m.s1", TSDataType.DOUBLE, TSEncoding.PLAIN, Compressor.SNAPPY)
 
 measurements_ = ["s1"]
 values_ = [10]
@@ -36,24 +36,29 @@ def millis():
    ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
    return ms
 
+
+# Fixing random state for reproducibility
+np.random.seed(19680801)
+
+# dt:frequency one sec
+dt = 0.00048828125
+t = np.arange(0, 600, dt)
+s1= np.around(np.random.randn(len(t))+20,4)
+print(len(s1))
 milliseconds=0
-time=0
-start_time = datetime.now()
+
 try:
-    while milliseconds<(60*1000):
-        values = []
-        temperature = 20.0
-        temperature += random.uniform(-1, 1)
-        values.append(np.around(temperature, 4))
-        # print(values)
+    start_time = datetime.now()
+    for time in range(len(s1)):
+        values=[s1[time]]
         milliseconds = int(millis())
-        # print(milliseconds/1000)
-        session.insert_record("root.batch", milliseconds, measurements_, data_types_, values)
-        time +=1
-        sleep(0.00048828125)
+        print(milliseconds)
+        session.insert_record("root.one_m", time, measurements_, data_types_, values)
 finally:
     # close session connection.
     print(time)
+    milliseconds = int(millis())
+    print(milliseconds/1000)
     session.close()
     print("All executions done!!")
 

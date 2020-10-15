@@ -5,6 +5,7 @@ from Session import Session
 from time import sleep
 import time
 from datetime import datetime
+from datetime import timedelta
 # creating session connection.
 ip = "127.0.0.1"
 port_ = "6667"
@@ -28,17 +29,26 @@ for _ in range(len(ts_path_lst_)):
 encoding_lst_ = [TSEncoding.PLAIN for _ in range(len(data_type_lst_))]
 compressor_lst_ = [Compressor.SNAPPY for _ in range(len(data_type_lst_))]
 session.create_multi_time_series(ts_path_lst_, data_type_lst_, encoding_lst_, compressor_lst_)
-
+#
 sensor_number=20
 data_types_ = []
 for i in range(sensor_number):
     data_types_.append(TSDataType.DOUBLE)
-
+#
 measurements_ = ["s1", "s2", "s3", "s4", "s5","s6", "s7", "s8", "s9", "s10",
                  "s11", "s12", "s13", "s14", "s15","s16", "s17", "s18", "s19", "s20"]
 
+start_time = datetime.now()
+
+# returns the elapsed milliseconds since the start of the program
+def millis():
+   dt = datetime.now() - start_time
+   ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
+   return ms
+
 from opcua import Client
 client=Client("opc.tcp://127.0.0.1:12345")
+time=0
 try:
     client.connect()
     print("start client")
@@ -49,16 +59,16 @@ try:
         values = []
         for i in tempsens.get_children():
             values.append(i.get_value())
-        print(values)
-        milliseconds = datetime.now().microsecond
-        # print(milliseconds)
+        # print(values)
+        milliseconds=int(millis())
         session.insert_record("root.opcua", milliseconds, measurements_, data_types_, values)
-        # sleep(2)
+        time+=1
 
 finally:
+    print(time)
+    print(milliseconds)
     # close session connection.
     session.close()
-    print("All executions done!!")
     client.close_session()
     print("client close")
 

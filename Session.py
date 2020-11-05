@@ -225,7 +225,7 @@ class Session(object):
         data_types = [data_type.value for data_type in data_types]
         request = self.gen_insert_record_req(device_id, timestamp, measurements, data_types, values)
         status = self.__client.insertRecord(request)
-        print("insert one record to device {} message: {}".format(device_id, status.message))
+        # print("insert one record to device {} message: {}".format(device_id, status.message))
 
     def insert_records(self, device_ids, times, measurements_lst, types_lst, values_lst):
         """
@@ -243,7 +243,7 @@ class Session(object):
             type_values_lst.append(data_types)
         request = self.gen_insert_records_req(device_ids, times, measurements_lst, type_values_lst, values_lst)
         resp = self.__client.insertRecords(request)
-        print("insert multiple records to devices {} message: {}".format(device_ids, resp.statusList[0].message))
+        # print("insert multiple records to devices {} message: {}".format(device_ids, resp.statusList[0].message))
 
     def test_insert_record(self, device_id, timestamp, measurements, data_types, values):
         """
